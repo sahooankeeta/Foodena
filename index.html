@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,600,700"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="images/logo.jpg" type="image/x-icon" />
+
+    <link rel="stylesheet" href="css/main.css" />
+
+    <script defer src="js/controller.js" type="module"></script>
+    <title>foodena // Search over 1,000,000 recipes</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="header">
+        <img
+          src="https://img-premium.flaticon.com/png/512/3387/premium/3387987.png?token=exp=1630564702~hmac=2a7b428ae9405de280d1c09a346bcce3"
+          alt="Logo"
+          class="header__logo"
+        />
+        <form class="search">
+          <input
+            type="text"
+            class="search__field"
+            placeholder="Search over 1,000,000 recipes..."
+          />
+          <button class="btn search__btn">
+            <span>Search</span>
+            <svg>
+              <use href="images/sprite.svg#icon-magnifying-glass"></use>
+            </svg>
+          </button>
+        </form>
+
+        <nav class="nav">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <button class="nav__btn nav__btn--likes">
+                <svg class="nav__icon">
+                  <use href="images/sprite.svg#icon-heart-outlined"></use>
+                </svg>
+                <span>Likes</span>
+              </button>
+              <div class="likes">
+                <ul class="likes__list">
+                  <div class="message">
+                    <div>
+                      <img
+                        src="https://img-premium.flaticon.com/png/512/3220/premium/3220795.png?token=exp=1630564465~hmac=b61ffa01f6267b64ec3ad53597728a07"
+                      />
+                    </div>
+                    <p>No likes yet. Find a nice recipe and like it :)</p>
+                  </div>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <div class="search-results">
+        <ul class="results"></ul>
+
+        <div class="pagination"></div>
+      </div>
+
+      <div class="recipe">
+        <div class="message recipe_view_empty">
+          <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+          <div>
+            <img src="images/undraw_Hamburger.svg" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
