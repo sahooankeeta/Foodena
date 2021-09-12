@@ -1,12 +1,14 @@
 import View from "./View.js";
-//import icons from 'url:../../img/icons.svg';
-import { RES_PER_PAGE } from "./../config.js";
-class PaginationView extends View {
-  _parentEl = document.querySelector(".pagination");
+
+class SliderView extends View {
+  _parentEl = document.querySelector(".slider");
 
   addHandleClick(handler) {
+    console.log("slider");
     this._parentEl.addEventListener("click", function (e) {
+      // console.log('clicked');
       const btn = e.target.closest(".btn--inline");
+
       if (btn) {
         const page = +btn.dataset.goto;
         handler(page);
@@ -15,12 +17,12 @@ class PaginationView extends View {
   }
 
   _generateMarkup() {
-    const numPages = Math.ceil(this._data.results.length / RES_PER_PAGE);
+    const numPages = Math.ceil(this._data.results.length / 4);
     const curPage = this._data.page;
     if (curPage == 1 && numPages > 1)
       return `
     <button data-goto=${curPage + 1} class="btn--inline pagination__btn--next">
-    <span>Page ${curPage + 1}</span>
+    <span></span>
     <svg class="search__icon">
       <use href="images/sprite.svg#icon-arrow-long-right"></use>
     </svg>
@@ -31,12 +33,12 @@ class PaginationView extends View {
             <svg class="search__icon">
               <use href="images/sprite.svg#icon-arrow-long-left"></use>
             </svg>
-            <span>Page ${curPage - 1}</span>
+            <span></span>
           </button>`;
     if (curPage < numPages)
       return `
     <button data-goto=${curPage + 1} class="btn--inline pagination__btn--next">
-    <span>Page ${curPage + 1}</span>
+    <span></span>
     <svg class="search__icon">
       <use href="images/icons.svg#icon-arrow-right"></use>
     </svg>
@@ -45,9 +47,9 @@ class PaginationView extends View {
             <svg class="search__icon">
               <use href="images/icons.svg#icon-arrow-left"></use>
             </svg>
-            <span>Page ${curPage - 1}</span>
+            <span></span>
           </button>`;
     return "";
   }
 }
-export default new PaginationView();
+export default new SliderView();

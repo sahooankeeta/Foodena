@@ -51,7 +51,22 @@ class RecipeView extends View {
     </div>
 
     <div class="recipe__directions">
-      <h2 class="heading--2"><a href=${recipe.videoLink}>How to cook it</a></h2>
+      <h2 class="heading--2">Instructions</h2>
+      <ul class="recipe__instructions">
+      ${recipe.instructions
+        .map((instruction, i) => `<li>${instruction}</li>`)
+        .join("")}
+      </ul>
+      <div class="recipe__video"> <iframe
+      title=${recipe.id}
+      width="515"
+      height="360"
+      src=${recipe.videoLink}
+      frameBorder="0"
+      gesture="media"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+  ></iframe></div>
      
     </div>
      

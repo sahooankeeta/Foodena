@@ -10,6 +10,10 @@ export const state = {
     page: 1,
   },
   likes: [],
+  recommendations: {
+    results: [],
+    pages: 0,
+  },
 };
 const createRecipeObject = function (data) {
   let items = [],
@@ -31,25 +35,50 @@ const createRecipeObject = function (data) {
   return {
     id: data.idMeal,
     title: data.strMeal,
+    area: data.strArea,
+    category: data.strCategry,
     image: data.strMealThumb,
     ingredients: ingredients,
-    videoLink: data.strYoutube,
+    instructions: data.strInstructions
+      .split("/d*\\r\\n/g")[0]
+      .split(".")
+      .filter((i) => i !== ""),
+    tags: data.strTags ? data.strTags.split(",") : null,
+    sourceLink: data.strSource,
+    videoLink: `https://www.youtube.com/embed/${data.strYoutube.split("=")[1]}`,
     liked: false,
   };
 };
 export const loadRecipe = async function (id) {
   try {
-    const data = await getJSON(
+    const dataRecipe = await getJSON(
       `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
     );
-    console.log(data.meals);
-    state.recipe = createRecipeObject(data.meals[0]);
+    const dataRecommendation = await getJSON(
+      `https://www.themealdb.com/api/json/v1/1/filter.php?a=${dataRecipe.meals[0].strArea}`
+    );
+    // console.log(dataRecommendation.meals.slice(6));
 
-    let recipe = data.meals[0];
+    state.recipe = createRecipeObject(dataRecipe.meals[0]);
+    let recommendations = dataRecommendation.meals.filter(
+      (meal) => meal.idMeal != state.recipe.id
+    );
 
+    state.recommendations.results = recommendations.map((recipe) => {
+      return {
+        id: recipe.idMeal,
+        title: recipe.strMeal,
+        image: recipe.strMealThumb,
+      };
+    });
+    state.recommendations.pages = Math.ceil(
+      state.recommendations.results.length / 3
+    );
+    console.log(state);
+    let recipe = dataRecipe.meals[0];
+    console.log(state.recipe);
     if (state.likes.some((b) => b.id === id)) state.recipe.liked = true;
     else state.recipe.liked = false;
-    console.log("recipe loaded");
   } catch (err) {
     console.log(err);
     throw err;
@@ -80,6 +109,14 @@ export const getSearchResultsPage = function (page = state.search.page) {
   // console.log(start);
   return state.search.results.slice(start, end);
 };
+// export const slider = function (page = state.recommendations.page) {
+//   const resperpg = 4;
+//   state.recommendations.page = page;
+//   const start = (page - 1) * resperpg,
+//     end = page * resperpg;
+//   // console.log(start);
+//   return state.recommendations.results.slice(start, end);
+// };
 const persistBookmarks = function () {
   localStorage.setItem("bookmarks", JSON.stringify(state.bookmarks));
 };

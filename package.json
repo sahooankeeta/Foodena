@@ -11,6 +11,7 @@
   "author": "ankeeta",
   "license": "ISC",
   "dependencies": {
+    "@splidejs/splide": "^2.4.21",
     "node-sass": "^6.0.1",
     "npm-run-all": "^4.1.5"
   }
