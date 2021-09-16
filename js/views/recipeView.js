@@ -4,7 +4,9 @@ class RecipeView extends View {
   _parentEl = document.querySelector(".recipe");
   _errorMsg = "No such recipe found.Please try again :(";
   _message = "Start by searching for a recipe or an ingredient. Have fun!";
-
+  addHandler(handler) {
+    window.addEventListener("load", handler);
+  }
   addHandlerRender(handler) {
     ["hashchange"].forEach((e) => window.addEventListener(e, handler));
   }
@@ -57,16 +59,24 @@ class RecipeView extends View {
         .map((instruction, i) => `<li>${instruction}</li>`)
         .join("")}
       </ul>
+      <a class="btn--inline" href=${recipe.sourceLink}>know more</a>
+      ${
+        recipe.videoLink
+          ? `
       <div class="recipe__video"> <iframe
       title=${recipe.id}
-      width="515"
-      height="360"
+      width="565"
+      height="300"
       src=${recipe.videoLink}
       frameBorder="0"
       gesture="media"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
   ></iframe></div>
+      `
+          : ""
+      }
+     
      
     </div>
      

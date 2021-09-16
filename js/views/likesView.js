@@ -2,7 +2,9 @@ import View from "./View.js";
 // import icons from 'url:../../img/icons.svg';
 class likesView extends View {
   _parentEl = document.querySelector(".likes__list");
-
+  addHandler(handler) {
+    window.addEventListener("load", handler);
+  }
   _generateMarkup() {
     if (this._data.length == 0)
       return ` <div class="message">

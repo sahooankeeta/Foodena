@@ -3,7 +3,6 @@ import recipeView from "./views/recipeView.js";
 import searchView from "./views/searchView.js";
 import resultsView from "./views/resultsView.js";
 import paginationView from "./views/paginationView.js";
-// import sliderView from "./views/sliderView.js";
 import recommendationView from "./views/recommendationView.js";
 import likesView from "./views/likesView.js";
 import View from "./views/View.js";
@@ -23,14 +22,13 @@ const controlRecipes = async function () {
     resultsView.update(model.getSearchResultsPage());
 
     likesView.update(model.state.likes);
-
+    console.log("rec");
     await model.loadRecipe(id);
 
     let recipe = model.state.recipe;
-    //console.log(recipe);
+
     recipeView.render(recipe);
     recommendationView.render(model.state.recommendations);
-    // sliderView.render(model.state.recommendations);
   } catch (err) {
     console.log(err);
     recipeView.renderError();
@@ -64,15 +62,7 @@ const controlPagination = function (page = 1) {
   resultsView.render(model.getSearchResultsPage(page));
   paginationView.render(model.state.search);
 };
-const controlSlider = function (page = 1) {
-  // paginationView.getPage();
-  console.log("sled");
-  recommendationView.render(model.slider());
-  sliderView.render(model.state.recommendations);
 
-  recommendationView.render(model.slider(page));
-  sliderView.render(model.state.recommendations);
-};
 //window.addEventListener('hashchange', showRecipe);
 console.log("running");
 
@@ -81,12 +71,23 @@ const controlLike = function () {
   recipeView.update(model.state.recipe);
   likesView.render(model.state.likes);
 };
-
+const controlLikes = function () {
+  likesView.render(model.state.likes);
+};
+const controlRecipe = function () {
+  recipeView.render(model.state.recipe);
+};
+const controlRecommendation = function () {
+  recommendationView.render(model.state.recommendations);
+};
 const init = function () {
+  likesView.addHandler(controlLikes);
+  recipeView.addHandler(controlRecipe);
+  recipeView.addHandler(controlRecommendation);
   searchView.addHandlerSearch(controlSearch);
   recipeView.addHandlerRender(controlRecipes);
   paginationView.addHandleClick(controlPagination);
-  //sliderView.addHandleClick(controlSlider);
+
   recipeView.addHandlerLike(controlLike);
 };
 init();

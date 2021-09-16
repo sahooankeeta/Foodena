@@ -10,10 +10,7 @@ export const state = {
     page: 1,
   },
   likes: [],
-  recommendations: {
-    results: [],
-    pages: 0,
-  },
+  recommendations: [],
 };
 const createRecipeObject = function (data) {
   let items = [],
@@ -45,11 +42,14 @@ const createRecipeObject = function (data) {
       .filter((i) => i !== ""),
     tags: data.strTags ? data.strTags.split(",") : null,
     sourceLink: data.strSource,
-    videoLink: `https://www.youtube.com/embed/${data.strYoutube.split("=")[1]}`,
+    videoLink: data.strYoutube
+      ? `https://www.youtube.com/embed/${data.strYoutube.split("=")[1]}`
+      : null,
     liked: false,
   };
 };
 export const loadRecipe = async function (id) {
+  window.scroll({ top: 0, left: 0 });
   try {
     const dataRecipe = await getJSON(
       `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
@@ -60,23 +60,23 @@ export const loadRecipe = async function (id) {
     // console.log(dataRecommendation.meals.slice(6));
 
     state.recipe = createRecipeObject(dataRecipe.meals[0]);
+    persistRecipe();
+    console.log(state.recipe);
     let recommendations = dataRecommendation.meals.filter(
       (meal) => meal.idMeal != state.recipe.id
     );
 
-    state.recommendations.results = recommendations.map((recipe) => {
+    state.recommendations = recommendations.map((recipe) => {
       return {
         id: recipe.idMeal,
         title: recipe.strMeal,
         image: recipe.strMealThumb,
       };
     });
-    state.recommendations.pages = Math.ceil(
-      state.recommendations.results.length / 3
-    );
+    persistRecommendations();
     console.log(state);
     let recipe = dataRecipe.meals[0];
-    console.log(state.recipe);
+
     if (state.likes.some((b) => b.id === id)) state.recipe.liked = true;
     else state.recipe.liked = false;
   } catch (err) {
@@ -85,21 +85,63 @@ export const loadRecipe = async function (id) {
   }
 };
 export const loadSearchResults = async function (query) {
-  //console.log(`${API_URL}${query}`);
-  const res = await fetch(
+  const recipes = await fetch(
     `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
   );
-  const data = await res.json();
+  const dataRecipes = await recipes.json();
+  const area = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/filter.php?a=${query}`
+  );
+
+  const dataAreaRecipes = await area.json();
+  // console.log(dataRecipes.meals);
+  const category = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/filter.php?c=${query}`
+  );
+
+  const dataCategoryRecipes = await category.json();
+  const ingredients = await fetch(
+    `https://www.themealdb.com/api/json/v1/1/list.php?i=${query}`
+  );
+  const dataIngredientRecipes = await ingredients.json();
 
   //console.log(data.meals);
-  state.search.results = data.meals.map((recipe) => {
-    return {
-      id: recipe.idMeal,
-      title: recipe.strMeal,
-      image: recipe.strMealThumb,
-    };
-  });
-  // console.log(state.search);
+  if (dataRecipes.meals != null)
+    state.search.results = dataRecipes.meals.map((recipe) => {
+      return {
+        id: recipe.idMeal,
+        title: recipe.strMeal,
+        image: recipe.strMealThumb,
+      };
+    });
+  if (dataAreaRecipes.meals != null)
+    dataAreaRecipes.meals.forEach((recipe) => {
+      if (recipe.idMeal)
+        state.search.results.push({
+          id: recipe.idMeal,
+          title: recipe.strMeal,
+          image: recipe.strMealThumb,
+        });
+    });
+  if (dataCategoryRecipes.meals != null)
+    dataCategoryRecipes.meals.forEach((recipe) => {
+      if (recipe.idMeal)
+        state.search.results.push({
+          id: recipe.idMeal,
+          title: recipe.strMeal,
+          image: recipe.strMealThumb,
+        });
+    });
+  if (dataIngredientRecipes.meals != null)
+    dataIngredientRecipes.meals.forEach((recipe) => {
+      if (recipe.idMeal)
+        state.search.results.push({
+          id: recipe.idMeal,
+          title: recipe.strMeal,
+          image: recipe.strMealThumb,
+        });
+    });
+  console.log(state.search.results);
 };
 export const getSearchResultsPage = function (page = state.search.page) {
   const resperpg = RES_PER_PAGE;
@@ -109,16 +151,19 @@ export const getSearchResultsPage = function (page = state.search.page) {
   // console.log(start);
   return state.search.results.slice(start, end);
 };
-// export const slider = function (page = state.recommendations.page) {
-//   const resperpg = 4;
-//   state.recommendations.page = page;
-//   const start = (page - 1) * resperpg,
-//     end = page * resperpg;
-//   // console.log(start);
-//   return state.recommendations.results.slice(start, end);
-// };
-const persistBookmarks = function () {
-  localStorage.setItem("bookmarks", JSON.stringify(state.bookmarks));
+
+const persistLikes = function () {
+  localStorage.setItem("likes", JSON.stringify(state.likes));
+};
+
+const persistRecipe = function () {
+  localStorage.setItem("currentRecipe", JSON.stringify(state.recipe));
+};
+const persistRecommendations = function () {
+  localStorage.setItem(
+    "recommendations",
+    JSON.stringify(state.recommendations)
+  );
 };
 export const addLike = function (recipe) {
   if (state.recipe.liked) deleteLike(recipe.id);
@@ -126,11 +171,23 @@ export const addLike = function (recipe) {
     state.likes.push(recipe);
     if (recipe.id === state.recipe.id) state.recipe.liked = true;
   }
-  persistBookmarks();
+  persistLikes();
 };
-export const deleteBookmark = function (id) {
+export const deleteLike = function (id) {
   const index = state.likes.findIndex((el) => el.id === id);
   state.likes.splice(index, 1);
   state.recipe.liked = false;
-  persistBookmarks();
+  persistLikes();
 };
+const init = function () {
+  const likes = localStorage.getItem("likes");
+
+  if (likes) state.likes = JSON.parse(likes);
+  console.log(state);
+
+  const recipe = localStorage.getItem("currentRecipe");
+  if (recipe) state.recipe = JSON.parse(recipe);
+  const recommendations = localStorage.getItem("recommendations");
+  if (recommendations) state.recommendations = JSON.parse(recommendations);
+};
+init();
