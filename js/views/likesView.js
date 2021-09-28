@@ -10,7 +10,7 @@ class likesView extends View {
       return ` <div class="message">
       <div>
         <img
-          src="https://img-premium.flaticon.com/png/512/3220/premium/3220795.png?token=exp=1630564465~hmac=b61ffa01f6267b64ec3ad53597728a07"
+          src="./images/icons8-sad-48.png"
         />
       </div>
       <p>
@@ -19,7 +19,7 @@ class likesView extends View {
     </div>
 `;
     const id = window.location.hash.slice(1);
-    console.log(id);
+    // console.log(id);
     return this._data
       .map(
         (recipe) => `

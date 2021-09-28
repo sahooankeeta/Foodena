@@ -10,7 +10,19 @@ const recipeContainer = document.querySelector(".recipe");
 const search = document.querySelector(".search");
 const searchBtn = document.querySelector(".search__btn");
 const searchResultsContainer = document.querySelector(".results");
+const persistLikes = function () {
+  sessionStorage.setItem("likes", JSON.stringify(model.state.likes));
+};
 
+const persistRecipe = function () {
+  sessionStorage.setItem("currentRecipe", JSON.stringify(model.state.recipe));
+};
+const persistRecommendations = function () {
+  sessionStorage.setItem(
+    "recommendations",
+    JSON.stringify(model.state.recommendations)
+  );
+};
 const controlRecipes = async function () {
   try {
     //const id = '5ed6604591c37cdc054bc886';
@@ -22,11 +34,13 @@ const controlRecipes = async function () {
     resultsView.update(model.getSearchResultsPage());
 
     likesView.update(model.state.likes);
-    console.log("rec");
+
     await model.loadRecipe(id);
 
     let recipe = model.state.recipe;
-
+    persistLikes();
+    persistRecipe();
+    persistRecommendations();
     recipeView.render(recipe);
     recommendationView.render(model.state.recommendations);
   } catch (err) {
@@ -36,14 +50,12 @@ const controlRecipes = async function () {
 };
 const controlSearch = async function () {
   try {
-    // let query = 'pizza';
-
     resultsView.renderSpinner();
     const query = searchView.getQuery();
 
     await model.loadSearchResults(query);
     let res = model.state.search.results;
-    // console.log(res);
+    //console.log(res);
     if (res.length == 0)
       resultsView.renderError("no such item found.try again ");
     else resultsView.render(model.getSearchResultsPage(1));
@@ -69,6 +81,8 @@ console.log("running");
 const controlLike = function () {
   model.addLike(model.state.recipe);
   recipeView.update(model.state.recipe);
+  persistLikes();
+  persistRecipe();
   likesView.render(model.state.likes);
 };
 const controlLikes = function () {
@@ -91,3 +105,4 @@ const init = function () {
   recipeView.addHandlerLike(controlLike);
 };
 init();
+// window.unload = () => {

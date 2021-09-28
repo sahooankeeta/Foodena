@@ -1,4 +1,3 @@
-//import { async } from './regenerator-runtime/runtime';
 import { API_URL, RES_PER_PAGE, TIMEOUT } from "./config.js";
 import { getJSON } from "./helpers.js";
 
@@ -57,11 +56,9 @@ export const loadRecipe = async function (id) {
     const dataRecommendation = await getJSON(
       `https://www.themealdb.com/api/json/v1/1/filter.php?a=${dataRecipe.meals[0].strArea}`
     );
-    // console.log(dataRecommendation.meals.slice(6));
 
     state.recipe = createRecipeObject(dataRecipe.meals[0]);
-    persistRecipe();
-    console.log(state.recipe);
+
     let recommendations = dataRecommendation.meals.filter(
       (meal) => meal.idMeal != state.recipe.id
     );
@@ -73,8 +70,7 @@ export const loadRecipe = async function (id) {
         image: recipe.strMealThumb,
       };
     });
-    persistRecommendations();
-    console.log(state);
+
     let recipe = dataRecipe.meals[0];
 
     if (state.likes.some((b) => b.id === id)) state.recipe.liked = true;
@@ -94,7 +90,7 @@ export const loadSearchResults = async function (query) {
   );
 
   const dataAreaRecipes = await area.json();
-  // console.log(dataRecipes.meals);
+
   const category = await fetch(
     `https://www.themealdb.com/api/json/v1/1/filter.php?c=${query}`
   );
@@ -105,7 +101,6 @@ export const loadSearchResults = async function (query) {
   );
   const dataIngredientRecipes = await ingredients.json();
 
-  //console.log(data.meals);
   if (dataRecipes.meals != null)
     state.search.results = dataRecipes.meals.map((recipe) => {
       return {
@@ -141,53 +136,35 @@ export const loadSearchResults = async function (query) {
           image: recipe.strMealThumb,
         });
     });
-  console.log(state.search.results);
 };
 export const getSearchResultsPage = function (page = state.search.page) {
   const resperpg = RES_PER_PAGE;
   state.search.page = page;
   const start = (page - 1) * resperpg,
     end = page * resperpg;
-  // console.log(start);
   return state.search.results.slice(start, end);
 };
 
-const persistLikes = function () {
-  localStorage.setItem("likes", JSON.stringify(state.likes));
-};
-
-const persistRecipe = function () {
-  localStorage.setItem("currentRecipe", JSON.stringify(state.recipe));
-};
-const persistRecommendations = function () {
-  localStorage.setItem(
-    "recommendations",
-    JSON.stringify(state.recommendations)
-  );
-};
 export const addLike = function (recipe) {
   if (state.recipe.liked) deleteLike(recipe.id);
   else {
     state.likes.push(recipe);
     if (recipe.id === state.recipe.id) state.recipe.liked = true;
   }
-  persistLikes();
 };
 export const deleteLike = function (id) {
   const index = state.likes.findIndex((el) => el.id === id);
   state.likes.splice(index, 1);
   state.recipe.liked = false;
-  persistLikes();
 };
 const init = function () {
-  const likes = localStorage.getItem("likes");
+  const likes = sessionStorage.getItem("likes");
 
   if (likes) state.likes = JSON.parse(likes);
-  console.log(state);
 
-  const recipe = localStorage.getItem("currentRecipe");
+  const recipe = sessionStorage.getItem("currentRecipe");
   if (recipe) state.recipe = JSON.parse(recipe);
-  const recommendations = localStorage.getItem("recommendations");
+  const recommendations = sessionStorage.getItem("recommendations");
   if (recommendations) state.recommendations = JSON.parse(recommendations);
 };
 init();

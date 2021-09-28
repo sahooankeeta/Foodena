@@ -1,7 +1,7 @@
 import View from "./View.js";
 
 class RecommendationView extends View {
-  _parentEl = document.querySelector(".recommendations-list");
+  _parentEl = document.querySelector(".recommendations");
   _errorMsg = "No such recipe found.Please try again :(";
   _message = "Start by searching for a recipe or an ingredient. Have fun!";
   addHandler(handler) {
@@ -9,7 +9,11 @@ class RecommendationView extends View {
   }
   _generateMarkup() {
     let recipes = this._data;
-    return recipes
+    // if (this._data.length == 0) {
+    //   document.querySelector(".recommendations").innerHTML = "";
+    //   return;
+    // }
+    let markup = recipes
       .map(
         (recipe) => ` <li class="recommendations-item">
               <a href="#${recipe.id}" class="recommendations__link">
@@ -24,6 +28,15 @@ class RecommendationView extends View {
             </li>`
       )
       .join("");
+    if (this._data.length != 0)
+      return (
+        `
+    <h2 class="heading--2">you may also like :</h2>
+    <ul class="recommendations-list">` +
+        markup +
+        `</ul>
+      `
+      );
   }
 }
 

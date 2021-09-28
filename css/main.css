@@ -355,6 +355,8 @@ body {
 }
 .likes__list {
   list-style: none;
+  max-height: 500px;
+  overflow-y: auto;
 }
 .likes__list .message img {
   height: 5rem;
