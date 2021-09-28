@@ -32,9 +32,11 @@ class RecipeView extends View {
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">
-      ${recipe.ingredients
-        .map((item) => {
-          return ` <li class="recipe__ingredient">
+      ${
+        recipe.ingredients
+          ? recipe.ingredients
+              .map((item) => {
+                return ` <li class="recipe__ingredient">
         <svg class="recipe__icon">
           <use href="images/sprite.svg#icon-checkmark"></use>
         </svg>
@@ -46,8 +48,10 @@ class RecipeView extends View {
           ${item.description}
         </div>
       </li>`;
-        })
-        .join("")}
+              })
+              .join("")
+          : ``
+      }
 
       </ul>
     </div>
@@ -55,9 +59,13 @@ class RecipeView extends View {
     <div class="recipe__directions">
       <h2 class="heading--2">Instructions</h2>
       <ul class="recipe__instructions">
-      ${recipe.instructions
-        .map((instruction, i) => `<li>${instruction}</li>`)
-        .join("")}
+      ${
+        recipe.instructions
+          ? recipe.instructions
+              .map((instruction, i) => `<li>${instruction}</li>`)
+              .join("")
+          : ``
+      }
       </ul>
       <a class="btn--inline" href=${recipe.sourceLink}>know more</a>
       ${

@@ -41,6 +41,7 @@ const controlRecipes = async function () {
     persistLikes();
     persistRecipe();
     persistRecommendations();
+
     recipeView.render(recipe);
     recommendationView.render(model.state.recommendations);
   } catch (err) {
@@ -89,7 +90,7 @@ const controlLikes = function () {
   likesView.render(model.state.likes);
 };
 const controlRecipe = function () {
-  recipeView.render(model.state.recipe);
+  if (model.state.recipe.id) recipeView.render(model.state.recipe);
 };
 const controlRecommendation = function () {
   recommendationView.render(model.state.recommendations);
@@ -101,7 +102,6 @@ const init = function () {
   searchView.addHandlerSearch(controlSearch);
   recipeView.addHandlerRender(controlRecipes);
   paginationView.addHandleClick(controlPagination);
-
   recipeView.addHandlerLike(controlLike);
 };
 init();
