@@ -77,7 +77,7 @@ const controlPagination = function (page = 1) {
 };
 
 //window.addEventListener('hashchange', showRecipe);
-console.log("running");
+// console.log("running");
 
 const controlLike = function () {
   model.addLike(model.state.recipe);
