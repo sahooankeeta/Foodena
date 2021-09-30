@@ -2,11 +2,11 @@
   "name": "foodena",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "home.html",
   "scripts": {
     "watch:sass": "node-sass sass/main.scss css/main.css -w",
     "devserver": "live-server",
-    "start": "node index.html"
+    "start": "node home.html"
   },
   "author": "ankeeta",
   "license": "ISC",
