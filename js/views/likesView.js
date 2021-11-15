@@ -1,5 +1,6 @@
 import View from "./View.js";
-// import icons from 'url:../../img/icons.svg';
+
+//rendering items of the like tab
 class likesView extends View {
   _parentEl = document.querySelector(".likes__list");
   addHandler(handler) {
@@ -19,7 +20,7 @@ class likesView extends View {
     </div>
 `;
     const id = window.location.hash.slice(1);
-    // console.log(id);
+
     return this._data
       .map(
         (recipe) => `

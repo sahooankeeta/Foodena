@@ -10,6 +10,8 @@ const recipeContainer = document.querySelector(".recipe");
 const search = document.querySelector(".search");
 const searchBtn = document.querySelector(".search__btn");
 const searchResultsContainer = document.querySelector(".results");
+
+//persisting data
 const persistLikes = function () {
   sessionStorage.setItem("likes", JSON.stringify(model.state.likes));
 };
@@ -23,6 +25,8 @@ const persistRecommendations = function () {
     JSON.stringify(model.state.recommendations)
   );
 };
+
+//controllers for view
 const controlRecipes = async function () {
   try {
     //const id = '5ed6604591c37cdc054bc886';
@@ -76,9 +80,6 @@ const controlPagination = function (page = 1) {
   paginationView.render(model.state.search);
 };
 
-//window.addEventListener('hashchange', showRecipe);
-// console.log("running");
-
 const controlLike = function () {
   model.addLike(model.state.recipe);
   recipeView.update(model.state.recipe);
@@ -95,6 +96,7 @@ const controlRecipe = function () {
 const controlRecommendation = function () {
   recommendationView.render(model.state.recommendations);
 };
+//the main function
 const init = function () {
   likesView.addHandler(controlLikes);
   recipeView.addHandler(controlRecipe);
@@ -105,4 +107,3 @@ const init = function () {
   recipeView.addHandlerLike(controlLike);
 };
 init();
-// window.unload = () => {

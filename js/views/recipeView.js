@@ -1,5 +1,6 @@
 import View from "./View.js";
 
+//viewing a selected recipe
 class RecipeView extends View {
   _parentEl = document.querySelector(".recipe");
   _errorMsg = "No such recipe found.Please try again :(";
@@ -92,10 +93,11 @@ class RecipeView extends View {
 
  `;
   }
+  //controlling like feature of this recipe
   addHandlerLike(handler) {
     this._parentEl.addEventListener("click", function (e) {
       const btn = e.target.closest(".btn-like");
-      console.log("to like", btn.dataset.like);
+
       if (!btn) return;
       handler();
     });

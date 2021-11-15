@@ -1,5 +1,6 @@
 import View from "./View.js";
-//import icons from 'url:../../img/icons.svg';
+
+//viewing results of a search
 class ResultsView extends View {
   _parentEl = document.querySelector(".results");
   _errorMsg = "No such recipe found.Please try again :(";

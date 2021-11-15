@@ -1,5 +1,6 @@
 import View from "./View.js";
 
+//For rendering recommendations section
 class RecommendationView extends View {
   _parentEl = document.querySelector(".recommendations");
   _errorMsg = "No such recipe found.Please try again :(";
@@ -9,10 +10,7 @@ class RecommendationView extends View {
   }
   _generateMarkup() {
     let recipes = this._data;
-    // if (this._data.length == 0) {
-    //   document.querySelector(".recommendations").innerHTML = "";
-    //   return;
-    // }
+
     let markup = recipes
       .map(
         (recipe) => ` <li class="recommendations-item">

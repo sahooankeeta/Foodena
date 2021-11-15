@@ -1,6 +1,7 @@
 import { API_URL, RES_PER_PAGE, TIMEOUT } from "./config.js";
 import { getJSON } from "./helpers.js";
 
+//initial state
 export const state = {
   recipe: {},
   search: {
@@ -11,6 +12,8 @@ export const state = {
   likes: [],
   recommendations: [],
 };
+
+//extracting necessary information from the API results
 const createRecipeObject = function (data) {
   let items = [],
     quantity = [];
@@ -47,6 +50,8 @@ const createRecipeObject = function (data) {
     liked: false,
   };
 };
+
+//fetching recipe details
 export const loadRecipe = async function (id) {
   window.scroll({ top: 0, left: 0 });
   try {
@@ -80,6 +85,8 @@ export const loadRecipe = async function (id) {
     throw err;
   }
 };
+
+//fetching search results
 export const loadSearchResults = async function (query) {
   const recipes = await fetch(
     `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`
@@ -137,6 +144,8 @@ export const loadSearchResults = async function (query) {
         });
     });
 };
+
+//rendering search results via pagination
 export const getSearchResultsPage = function (page = state.search.page) {
   const resperpg = RES_PER_PAGE;
   state.search.page = page;
@@ -145,6 +154,7 @@ export const getSearchResultsPage = function (page = state.search.page) {
   return state.search.results.slice(start, end);
 };
 
+//like a recipe
 export const addLike = function (recipe) {
   if (state.recipe.liked) deleteLike(recipe.id);
   else {
@@ -152,6 +162,8 @@ export const addLike = function (recipe) {
     if (recipe.id === state.recipe.id) state.recipe.liked = true;
   }
 };
+
+//unlike a recipe
 export const deleteLike = function (id) {
   const index = state.likes.findIndex((el) => el.id === id);
   state.likes.splice(index, 1);

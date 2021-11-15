@@ -1,5 +1,6 @@
 import View from "./View.js";
-//import icons from 'url:../../img/icons.svg';
+
+//implementing pagination for search results
 import { RES_PER_PAGE } from "./../config.js";
 class PaginationView extends View {
   _parentEl = document.querySelector(".pagination");

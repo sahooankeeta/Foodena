@@ -1,4 +1,3 @@
-// import icons from 'url:../../img/icons.svg';
 export default class View {
   _data;
   render(data) {
@@ -7,6 +6,7 @@ export default class View {
     this._clear();
     this._parentEl.insertAdjacentHTML("beforeend", markup);
   }
+  //the loading spinner
   renderSpinner() {
     const markup = `<div class="spinner">
         <svg>
@@ -16,6 +16,7 @@ export default class View {
     this._clear();
     this._parentEl.insertAdjacentHTML("beforeend", markup);
   }
+  //display error messages
   renderError(message = this._errorMsg) {
     const markup = `<div class="error">
     <div>
@@ -28,6 +29,7 @@ export default class View {
     this._clear();
     this._parentEl.insertAdjacentHTML("afterbegin", markup);
   }
+  //display initial messages
   renderMessage(message = this._message) {
     const markup = ` <div class="message">
     <div>
@@ -40,9 +42,11 @@ export default class View {
     this._clear();
     this._parentEl.insertAdjacentHTML("afterbegin", markup);
   }
+  //clearing view before rendering new data
   _clear() {
     this._parentEl.innerHTML = "";
   }
+
   update(data) {
     this._data = data;
     const newMarkup = this._generateMarkup();

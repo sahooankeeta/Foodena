@@ -6,6 +6,8 @@ const timeout = function (s) {
     }, s * 10000);
   });
 };
+
+//fetching data from the API
 export const getJSON = async function (url) {
   try {
     const fetchPro = fetch(url);
