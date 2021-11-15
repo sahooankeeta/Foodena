@@ -2,7 +2,7 @@
 <p>A meal app to search and like all your favourite recipes , made using vanilla javascript and TheMealDB api :)</p>
 Project URL: https://sahooankeeta.github.io/foodena/
 <br>
-Project demonstartion URL: https://screenrec.com/share/dGuHJgx6It
+Project demonstration URL: https://screenrec.com/share/dGuHJgx6It
 <br>
 Refer to the TheMealDb API <a href="https://www.themealdb.com/api.php">here</a>
 <h2>Landing Page</h2>
